@@ -636,7 +636,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
                     updateUiForConfigDataMap(config);
                 }
             } finally {
-                dataEvents.close();
+                dataEvents.release();
             }
 
         }

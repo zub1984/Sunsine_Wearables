@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
-import com.example.android.sunshine.app.util.DataManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
@@ -85,8 +84,7 @@ public class WearableWeatherService extends Service implements
             high  = Utility.getFormattedTemperature(this, high);
             low = Utility.getFormattedTemperature(this, low);
 
-            Log.d(TAG, "sendDataToWear: high temp: " + high);
-            Log.d(TAG, "sendDataToWear: low temp: " + low);
+            Log.d(TAG, "sendDataToWear: high_temp: " + high + "low temp:" + low);
 
             BigDecimal highBD = new BigDecimal(high);
             highBD = highBD.setScale(2, BigDecimal.ROUND_UP);
