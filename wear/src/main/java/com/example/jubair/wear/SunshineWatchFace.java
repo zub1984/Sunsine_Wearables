@@ -206,9 +206,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         @Override
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
-
-            Log.d(TAG, "onCreate: ");
-
+            //Log.d(TAG, "onCreate: ");
             setWatchFaceStyle(new WatchFaceStyle.Builder(SunshineWatchFace.this)
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
@@ -249,6 +247,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             mBatteryPaint = createTextPaint(colorPreset.getTextColor());
             setColorToBitmap(mBatteryPaint, colorPreset.getTextColor());
 
+            // initialize with default data
             setInitWeatherData();
 
         }
@@ -342,7 +341,6 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
          */
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
-
             hideTapHighlight();
             switch (tapType) {
                 case TAP_TYPE_TOUCH:
@@ -507,6 +505,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
             canvas.drawText(hourString, startXOffset, mScaledHourYOffset, mHourPaint);
             startXOffset += mHourPaint.measureText(hourString);
+
             canvas.drawText(minuteString, startXOffset, mScaledHourYOffset, mMinutePaint);
             startXOffset += mMinutePaint.measureText(minuteString);
 
@@ -526,10 +525,13 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         private void drawWeather(Canvas canvas) {
             mWeatherIconId = getIconResourceForWeatherCondition(mWeatherId);
             mWeatherIconBitmap = weatherIcons.get(mWeatherIconId);
+            //Log.d(TAG, "drawWeather:mWeatherIconBitmap=" + mWeatherIconBitmap + ",mWeatherId:" + mWeatherId);
             canvas.drawBitmap(mWeatherIconBitmap, mScaledWeatherIconXOffset, mScaledWeatherIconYOffset, null);
+
             String maxTempString = String.valueOf(mMaxTemp) + Constants.DEGREE + mWeatherUnit;
             String minTempString = String.valueOf(mMinTemp) + Constants.DEGREE + mWeatherUnit;
             canvas.drawText(maxTempString, mScaledWeatherTempXOffset, mScaledWeatherTempYOffset, mWeatherMaxTempPaint);
+
             float startXOffset = mScaledWeatherTempXOffset + mWeatherMinTempPaint.measureText(maxTempString);
             canvas.drawText(minTempString, startXOffset + 30, mScaledWeatherTempYOffset, mWeatherMinTempPaint);
         }
@@ -622,7 +624,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
                     }
 
                     DataItem dataItem = dataEvent.getDataItem();
-                    Log.d(TAG, "onDataChanged: Path" + dataItem.getUri().getPath());
+                    //Log.d(TAG, "onDataChanged: Path" + dataItem.getUri().getPath());
                     if (!dataItem.getUri().getPath().equals(
                             Constants.PATH_WEATHER_DATA)) {
                         continue;
@@ -630,9 +632,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
                     DataMap config = dataMapItem.getDataMap();
-                    if (Log.isLoggable(TAG, Log.DEBUG)) {
-                        Log.d(TAG, "Config DataItem updated:" + config);
-                    }
+                    //Log.d(TAG, "Config DataItem updated:" + config);
                     updateUiForConfigDataMap(config);
                 }
             } finally {
@@ -649,19 +649,16 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         }
 
         private void updateUiForConfigDataMap(final DataMap config) {
-
+            Log.d(TAG, "updateUiForConfigDataMap");
             for (String configKey : config.keySet()) {
 
                 if (!config.containsKey(configKey)) {
                     continue;
                 }
-
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Found watch face config key: " + configKey);
-                }
-
+               //Log.d(TAG, "Found watch face config key: " + configKey);
                 if (Constants.KEY_WEATHER_ID.equals(configKey)) {
                     int weatherId = config.getInt(configKey);
+                    mWeatherId=weatherId;
                     PreferencesUtil.savePrefs(SunshineWatchFace.this, Constants.KEY_WEATHER_ID, weatherId);
                 }
 

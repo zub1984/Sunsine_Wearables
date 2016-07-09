@@ -29,7 +29,7 @@ public class ConfigDataListenerService extends WearableListenerService implement
         com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks,
         com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = "CDListenerService";
+    private static final String TAG = ConfigDataListenerService.class.getSimpleName();
 
     GoogleApiClient mGoogleApiClient;
 
@@ -46,7 +46,7 @@ public class ConfigDataListenerService extends WearableListenerService implement
     public void onPeerConnected(Node peer) {
         Log.d(TAG, " onPeerConnected ");
         if (isServiceRunning(this, SunshineWatchFace.class)) {
-            Log.d(TAG, " sending start watch face ");
+            //Log.d(TAG, " sending start watch face ");
             sendMessageToDevice(Constants.PATH_START_WATCH_FACE);
         }
     }
@@ -68,30 +68,6 @@ public class ConfigDataListenerService extends WearableListenerService implement
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-
-//        if (PreferencesUtil.getPrefs(this, Constants.KEY_STOP_WATCH_FACE, false)) {
-//            sendMessageToDevice(Constants.PATH_STOP_WATCH_FACE);
-//            Log.d(TAG, "Watch face already destroyed.");
-//            return;
-//        }
-//
-//        String path = messageEvent.getPath();
-//        Log.d(TAG, "Message received on path " + path);
-//        if (mGoogleApiClient == null) {
-//            mGoogleApiClient = (new com.google.android.gms.common.api.GoogleApiClient.Builder(this)).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Wearable.API).build();
-//        }
-//        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.blockingConnect(30L, TimeUnit.SECONDS).isSuccess()) {
-//            Log.e(TAG, "Failed connect to Google Api client.");
-//            return;
-//        }
-//        if (Constants.PATH_CONFIG_DATA.equals(path)) {
-//            DataMap dataMap = DataMap.fromByteArray(messageEvent.getData());
-//            Log.d(TAG, "Message has data " + dataMap);
-//            DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, dataMap, path);
-//            return;
-//        } else {
-//            super.onMessageReceived(messageEvent);
-//        }
     }
 
 
@@ -99,29 +75,21 @@ public class ConfigDataListenerService extends WearableListenerService implement
     public void onDataChanged(DataEventBuffer dataEvents) {
         Log.d(TAG, "onDataChanged: ");
         try {
-            
             for (DataEvent dataEvent : dataEvents) {
                 if (dataEvent.getType() != DataEvent.TYPE_CHANGED) {
                     continue;
                 }
-
                 DataItem dataItem = dataEvent.getDataItem();
-
-                Log.d(TAG, "path: " + dataItem.getUri().getPath());
-
+                //Log.d(TAG, "path: " + dataItem.getUri().getPath());
                 if (!dataItem.getUri().getPath().equals(Constants.PATH_WEATHER_DATA)) {
                     continue;
                 }
-
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
                 DataMap config = dataMapItem.getDataMap();
-                if (Log.isLoggable(TAG, Log.DEBUG)) {
-                    Log.d(TAG, "Config DataItem updated:" + config);
-                }
                 DigitalWatchFaceUtil.overwriteKeysInConfigDataMap(mGoogleApiClient, config, Constants.PATH_WEATHER_DATA);
             }
         } finally {
-            dataEvents.close();
+            dataEvents.release();
         }
     }
 
@@ -156,17 +124,17 @@ public class ConfigDataListenerService extends WearableListenerService implement
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d(TAG, (new StringBuilder()).append("onConnected: ").append(bundle).toString());
+        //Log.d(TAG, (new StringBuilder()).append("onConnected: ").append(bundle).toString());
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(TAG, (new StringBuilder()).append("onConnectionSuspended: ").append(i).toString());
+        //Log.d(TAG, (new StringBuilder()).append("onConnectionSuspended: ").append(i).toString());
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, (new StringBuilder()).append("onConnectionFailed: ").append(connectionResult).toString());
+        //Log.d(TAG, (new StringBuilder()).append("onConnectionFailed: ").append(connectionResult).toString());
     }
 
 

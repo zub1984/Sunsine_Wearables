@@ -34,14 +34,15 @@ public final class DigitalWatchFaceUtil {
 
     private static final String TAG = "DigitalWatchFaceUtil";
 
-    private DigitalWatchFaceUtil() { }
+    private DigitalWatchFaceUtil() {
+    }
 
     private static int parseColor(String colorName) {
         return Color.parseColor(colorName.toLowerCase());
     }
 
     public static void fetchConfigDataMap(final GoogleApiClient client,
-            final FetchConfigDataMapCallback callback, final String path) {
+                                          final FetchConfigDataMapCallback callback, final String path) {
 
         Wearable.NodeApi.getLocalNode(client).setResultCallback(
                 new ResultCallback<NodeApi.GetLocalNodeResult>() {
@@ -64,13 +65,12 @@ public final class DigitalWatchFaceUtil {
      * Overwrites (or sets, if not present) the keys in the current config {@link com.google.android.gms.wearable.DataItem} with
      * the ones appearing in the given {@link com.google.android.gms.wearable.DataMap}. If the config DataItem doesn't exist,
      * it's created.
-     * <p>
+     * <p/>
      * It is allowed that only some of the keys used in the config DataItem appear in
      * {@code configKeysToOverwrite}. The rest of the keys remains unmodified in this case.
      */
     public static void overwriteKeysInConfigDataMap(final GoogleApiClient googleApiClient,
                                                     final DataMap configKeysToOverwrite, final String path) {
-
         DigitalWatchFaceUtil.fetchConfigDataMap(googleApiClient,
                 new FetchConfigDataMapCallback() {
                     @Override
@@ -81,7 +81,7 @@ public final class DigitalWatchFaceUtil {
                         DigitalWatchFaceUtil.putConfigDataItem(googleApiClient, overwrittenConfig, path);
                     }
                 }
-        , path);
+                , path);
     }
 
     public static void putConfigDataItem(GoogleApiClient googleApiClient, DataMap newConfig, String path) {

@@ -19,6 +19,9 @@ Library Dependency
     compile 'com.google.android.gms:play-services-wearable:8.4.0'
     compile 'com.google.android.support:wearable:1.3.0'
 
+Update your weather API Key
+--------------------------
+Update your key in build.gradle file --> it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', '"YOUR_KEY_HERE"'
 
 Getting Started
 ---------------

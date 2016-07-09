@@ -66,16 +66,12 @@ public class WearableWeatherService extends Service implements
     }
 
     private void sendDataToWear() {
-
         Log.d(TAG, "sendDataToWear: ");
 
         String locationQuery = Utility.getPreferredLocation(this);
-
         Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
-
         Cursor cursor = getBaseContext().getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
         DataMap dataMap = new DataMap();
-
         if (cursor.moveToFirst()) {
             int weatherId = cursor.getInt(INDEX_WEATHER_ID);
             double high = cursor.getDouble(INDEX_MAX_TEMP);
@@ -84,7 +80,7 @@ public class WearableWeatherService extends Service implements
             high  = Utility.getFormattedTemperature(this, high);
             low = Utility.getFormattedTemperature(this, low);
 
-            Log.d(TAG, "sendDataToWear: high_temp: " + high + "low temp:" + low);
+            //Log.d(TAG, "sendDataToWear: high_temp: " + high + "low temp:" + low +",weatherId:"+weatherId);
 
             BigDecimal highBD = new BigDecimal(high);
             highBD = highBD.setScale(2, BigDecimal.ROUND_UP);
